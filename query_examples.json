@@ -1,0 +1,36 @@
+{
+  "query_1_name": {
+    "query_text": "What is my name?",
+    "n_results": 5
+  },
+  "query_2_adhar": {
+    "query_text": "What is my Adhar number?",
+    "n_results": 5
+  },
+  "query_3_pan": {
+    "query_text": "What is my PAN number?",
+    "n_results": 5
+  },
+  "query_4_location": {
+    "query_text": "Where do I live?",
+    "n_results": 5
+  },
+  "query_5_profession": {
+    "query_text": "What do I do for work?",
+    "n_results": 5
+  },
+  "query_6_interests": {
+    "query_text": "What are my interests?",
+    "n_results": 5
+  },
+  "query_7_with_filter": {
+    "query_text": "personal information",
+    "n_results": 5,
+    "where": {"category": "personal-info"}
+  },
+  "query_8_location_filter": {
+    "query_text": "location",
+    "n_results": 5,
+    "where": {"type": "city"}
+  }
+}

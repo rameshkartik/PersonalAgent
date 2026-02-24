@@ -1,0 +1,14 @@
+{
+  "documents": [
+    "I am Rameshkartik, a software engineer with a passion for machine learning and natural language processing",
+    "My Adhar number is 3396-4206-9201",
+    "my PAN number is AIXPR3319N",
+    "I live in Coimbatore"
+  ],
+  "metadatas": [
+    {"category": "Introduction", "type": "self-description"},
+    {"category": "personal-info", "type": "Adhar"},
+    {"category": "personal-info", "type": "PAN"},
+    {"category": "location", "type": "city"}
+  ]
+}

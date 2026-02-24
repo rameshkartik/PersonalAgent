@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Knowledge Base - LLM Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding-right: 50px !important;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .results-container {
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-item.llm-response {
+            background: linear-gradient(135deg, #e8eaf6 0%, #f3e5f5 100%);
+            border-left-color: #764ba2;
+        }
+
+        .result-item h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .result-item p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .result-meta {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .status-message {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-item .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧠 Personal Knowledge Base</h1>
+            <p>AI-Powered Information Storage & Retrieval</p>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Add Data Card -->
+            <div class="card">
+                <h2>📝 Add Information</h2>
+                <div id="addStatus" class="status-message"></div>
+                
+                <form id="addForm">
+                    <div class="form-group">
+                        <label for="document">Information *</label>
+                        <textarea 
+                            id="document" 
+                            placeholder="e.g., I am a software engineer specializing in AI..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category">
+                            <option value="">Select category...</option>
+                            <option value="personal-info">Personal Info</option>
+                            <option value="work">Work</option>
+                            <option value="education">Education</option>
+                            <option value="hobbies">Hobbies</option>
+                            <option value="location">Location</option>
+                            <option value="skills">Skills</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type">Type/Tag</label>
+                        <input 
+                            type="text" 
+                            id="type" 
+                            placeholder="e.g., biography, role, certification..."
+                        />
+                    </div>
+
+                    <button type="submit" class="btn" id="addBtn">
+                        Add to Knowledge Base
+                    </button>
+                </form>
+            </div>
+
+            <!-- Search Card -->
+            <div class="card">
+                <h2>🔍 Search & Ask</h2>
+                
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab active" data-tab="llm">LLM Agent</button>
+                    <button class="tab" data-tab="simple">Simple Search</button>
+                </div>
+
+                <!-- LLM Search Tab -->
+                <div id="llm-tab" class="tab-content active">
+                    <div id="llmStatus" class="status-message"></div>
+                    
+                    <form id="llmForm">
+                        <div class="form-group">
+                            <label for="llmQuery">Ask me anything...</label>
+                            <div class="search-box">
+                                <input 
+                                    type="text" 
+                                    id="llmQuery" 
+                                    class="search-input"
+                                    placeholder="e.g., What is my name? Tell me about my skills..."
+                                    required
+                                />
+                                <span class="search-icon">💬</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" id="llmBtn">
+                            Ask LLM Agent
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Simple Search Tab -->
+                <div id="simple-tab" class="tab-content">
+                    <div id="searchStatus" class="status-message"></div>
+                    
+                    <form id="searchForm">
+                        <div class="form-group">
+                            <label for="searchQuery">Search query</label>
+                            <div class="search-box">
+                                <input 
+                                    type="text" 
+                                    id="searchQuery" 
+                                    class="search-input"
+                                    placeholder="Search your knowledge base..."
+                                    required
+                                />
+                                <span class="search-icon">🔎</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" id="searchBtn">
+                            Search
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Thinking...</p>
+                </div>
+
+                <!-- Results -->
+                <div id="results" class="results-container"></div>
+            </div>
+        </div>
+
+        <!-- Stats Card -->
+        <div class="stats">
+            <div class="stat-item">
+                <div class="number" id="totalDocs">0</div>
+                <div class="label">Documents</div>
+            </div>
+            <div class="stat-item">
+                <div class="number" id="totalSearches">0</div>
+                <div class="label">Searches</div>
+            </div>
+            <div class="stat-item">
+                <div class="number" id="apiStatus">●</div>
+                <div class="label">API Status</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let searchCount = 0;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAPIHealth();
+            loadStats();
+            setupEventListeners();
+        });
+
+        // Event Listeners
+        function setupEventListeners() {
+            // Form submissions
+            document.getElementById('addForm').addEventListener('submit', handleAddDocument);
+            document.getElementById('llmForm').addEventListener('submit', handleLLMQuery);
+            document.getElementById('searchForm').addEventListener('submit', handleSearch);
+
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+            });
+        }
+
+        // Tab Switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            // Clear results
+            document.getElementById('results').innerHTML = '';
+        }
+
+        // Check API Health
+        async function checkAPIHealth() {
+            try {
+                const response = await fetch(`${API_URL}/`);
+                const data = await response.json();
+                document.getElementById('apiStatus').textContent = '●';
+                document.getElementById('apiStatus').style.color = '#4caf50';
+                document.getElementById('apiStatus').title = 'API Connected';
+                return true;
+            } catch (error) {
+                document.getElementById('apiStatus').textContent = '●';
+                document.getElementById('apiStatus').style.color = '#f44336';
+                document.getElementById('apiStatus').title = 'API Disconnected - Start with: python api.py';
+                
+                // Show warning in both search tabs
+                const warningMsg = `
+                    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <strong>⚠️ API Server Not Running</strong><br>
+                        Start the server in a terminal:<br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin-top: 5px;">python api.py</code>
+                    </div>
+                `;
+                document.getElementById('llmStatus').innerHTML = warningMsg;
+                document.getElementById('llmStatus').style.display = 'block';
+                document.getElementById('searchStatus').innerHTML = warningMsg;
+                document.getElementById('searchStatus').style.display = 'block';
+                
+                return false;
+            }
+        }
+
+        // Load Stats
+        async function loadStats() {
+            try {
+                const response = await fetch(`${API_URL}/stats`);
+                const data = await response.json();
+                document.getElementById('totalDocs').textContent = data.total_documents;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Add Document
+        async function handleAddDocument(e) {
+            e.preventDefault();
+            
+            const docText = document.getElementById('document').value;
+            const category = document.getElementById('category').value;
+            const type = document.getElementById('type').value;
+
+            const metadata = {};
+            if (category) metadata.category = category;
+            if (type) metadata.type = type;
+
+            const btn = document.getElementById('addBtn');
+            btn.disabled = true;
+            btn.textContent = 'Adding...';
+
+            try {
+                const response = await fetch(`${API_URL}/documents`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ document: docText, metadata })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showMessage('success', `✓ Information added successfully! ID: ${data.id}`, 'addStatus');
+                    document.getElementById('addForm').reset();
+                    loadStats();
+                } else {
+                    throw new Error('Failed to add document');
+                }
+            } catch (error) {
+                showMessage('error', `Error: ${error.message}`, 'addStatus');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Add to Knowledge Base';
+            }
+        }
+
+        // LLM Query
+        async function handleLLMQuery(e) {
+            e.preventDefault();
+            
+            const query = document.getElementById('llmQuery').value;
+            const resultsDiv = document.getElementById('results');
+            const loading = document.getElementById('loading');
+
+            loading.classList.add('active');
+            resultsDiv.innerHTML = '';
+            searchCount++;
+            document.getElementById('totalSearches').textContent = searchCount;
+
+            try {
+                const response = await fetch(`${API_URL}/llm/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: query })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayLLMResponse(data.response, data.sources);
+                } else {
+                    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+                    
+                    if (response.status === 500 && error.detail && error.detail.includes('LLM configuration')) {
+                        showMessage('error', 
+                            'LLM not configured. Set OPENAI_API_KEY in .env file or use Simple Search instead.', 
+                            'llmStatus');
+                    } else if (error.detail && error.detail.includes('LLM dependencies')) {
+                        showMessage('error', 
+                            'LLM dependencies not installed. Run: pip install openai', 
+                            'llmStatus');
+                    } else {
+                        showMessage('error', error.detail || 'Error processing query', 'llmStatus');
+                    }
+                }
+            } catch (error) {
+                if (error.message.includes('Failed to fetch')) {
+                    showMessage('error', 
+                        'Cannot connect to API server. Make sure: python api.py is running', 
+                        'llmStatus');
+                } else {
+                    showMessage('error', `Error: ${error.message}`, 'llmStatus');
+                }
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        // Simple Search
+        async function handleSearch(e) {
+            e.preventDefault();
+            
+            const query = document.getElementById('searchQuery').value;
+            const resultsDiv = document.getElementById('results');
+            const loading = document.getElementById('loading');
+
+            loading.classList.add('active');
+            resultsDiv.innerHTML = '';
+            searchCount++;
+            document.getElementById('totalSearches').textContent = searchCount;
+
+            try {
+                const response = await fetch(`${API_URL}/query`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query_text: query, n_results: 5 })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displaySearchResults(data);
+                } else {
+                    throw new Error('Search failed');
+                }
+            } catch (error) {
+                showMessage('error', `Error: ${error.message}`, 'searchStatus');
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        // Display LLM Response
+        function displayLLMResponse(response, sources) {
+            const resultsDiv = document.getElementById('results');
+            
+            const responseHTML = `
+                <div class="result-item llm-response">
+                    <h4>🤖 LLM Agent Response</h4>
+                    <p>${response}</p>
+                    ${sources && sources.length > 0 ? `
+                        <div class="result-meta">
+                            <strong>Sources:</strong> ${sources.length} document(s) used
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = responseHTML;
+        }
+
+        // Display Search Results
+        function displaySearchResults(data) {
+            const resultsDiv = document.getElementById('results');
+            
+            if (!data.documents || data.documents.length === 0) {
+                resultsDiv.innerHTML = '<div class="result-item"><p>No results found.</p></div>';
+                return;
+            }
+
+            let html = `<p style="margin-bottom: 15px; color: #666;">Found ${data.documents.length} result(s)</p>`;
+            
+            data.documents.forEach((doc, index) => {
+                const meta = data.metadatas[index] || {};
+                const score = data.distances[index];
+                
+                html += `
+                    <div class="result-item">
+                        <h4>Result ${index + 1}</h4>
+                        <p>${doc}</p>
+                        <div class="result-meta">
+                            ${meta.category ? `Category: ${meta.category}` : ''}
+                            ${meta.type ? ` | Type: ${meta.type}` : ''}
+                            ${score !== undefined ? ` | Relevance: ${(1 - score).toFixed(2)}` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        // Show Message
+        function showMessage(type, message, elementId) {
+            const messageDiv = document.getElementById(elementId);
+            messageDiv.className = `status-message ${type}`;
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
