@@ -216,3 +216,12 @@ This is a basic implementation. For production use, consider adding:
 ## License
 
 MIT
+
+## MetaData
+
+This metadata is used for internal purposes
+  - category : Whitepapers
+  - sdlcStage : plan
+  - personas : ['CTO','Enterprise Architect','AI Developer']
+  - tags : ['AI','Agents']
+  - metadata: { capability: 'Storage Solution', integrationType: 'Semantic Search', scope: 'Multi-Service Deployments' }
