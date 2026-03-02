@@ -217,11 +217,12 @@ This is a basic implementation. For production use, consider adding:
 
 MIT
 
-## MetaData
+## RDEData
+Title : PersonalAgentGit
+Description : A Personal Agent to take care of personal day to day work
+category : Whitepapers
+sdlcStage : plan
+personas : ['CTO','Enterprise Architect','AI Developer']
+tags : ['AI','Agents']
+metadata: { capability: 'Storage Solution', integrationType: 'Semantic Search', scope: 'Multi-Service Deployments' }
 
-This metadata is used for internal purposes
-  - category : Whitepapers
-  - sdlcStage : plan
-  - personas : ['CTO','Enterprise Architect','AI Developer']
-  - tags : ['AI','Agents']
-  - metadata: { capability: 'Storage Solution', integrationType: 'Semantic Search', scope: 'Multi-Service Deployments' }
