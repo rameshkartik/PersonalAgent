@@ -218,11 +218,11 @@ This is a basic implementation. For production use, consider adding:
 MIT
 
 ## RDEData
-title : PersonalAgentGit
-description : A Personal Agent to take care of personal day to day work
-category : Whitepapers
-sdlcStage : plan
-personas : ['CTO','Enterprise Architect','AI Developer']
-tags : ['AI','Agents']
+title : PersonalAgent
+description : A Personal Agent to take care of personal day to day work1
+category : Whitepapers1
+sdlcStage : plan1
+personas : ['CTO','Enterprise Architect','AI Developer1']
+tags : ['AI','Agents1']
 metadata: { capability: 'Storage Solution', integrationType: 'Semantic Search', scope: 'Multi-Service Deployments' }
 
