@@ -219,10 +219,10 @@ MIT
 
 ## RDEData
 title : PersonalAgent
-description : A Personal Agent to take care of personal day to day work1
-category : Whitepapers1
-sdlcStage : plan1
-personas : ['CTO','Enterprise Architect','AI Developer1']
-tags : ['AI','Agents1']
+description : A Personal Agent to take care of personal day to day work
+category : Whitepapers
+sdlcStage : plan
+personas : ['CTO','Enterprise Architect','AI Developer']
+tags : ['AI','Agents']
 metadata: { capability: 'Storage Solution', integrationType: 'Semantic Search', scope: 'Multi-Service Deployments' }
 
