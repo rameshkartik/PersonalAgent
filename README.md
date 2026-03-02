@@ -259,5 +259,5 @@ It goes beyond a simple chatbot — it can remember preferences, take actions, a
 ## RDE_Details_Keypoints
 Production Ready,
 Fully Documented,
-Acrtive Support,
+Active Support,
 CI/CD Integrated
