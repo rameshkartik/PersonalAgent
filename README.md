@@ -257,7 +257,7 @@ and interact with digital systems.
 It goes beyond a simple chatbot — it can remember preferences, take actions, and operate across tools.
 
 ## RDE_Details_Keypoints
-Prroduction Ready,
+Production Ready,
 Fully Documented,
 Acrtive Support,
 CI/CD Integrated
