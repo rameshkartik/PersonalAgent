@@ -218,8 +218,8 @@ This is a basic implementation. For production use, consider adding:
 MIT
 
 ## RDEData
-Title : PersonalAgentGit
-Description : A Personal Agent to take care of personal day to day work
+title : PersonalAgentGit
+description : A Personal Agent to take care of personal day to day work
 category : Whitepapers
 sdlcStage : plan
 personas : ['CTO','Enterprise Architect','AI Developer']
