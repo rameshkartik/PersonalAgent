@@ -226,3 +226,24 @@ personas : ['CTO','Enterprise Architect','AI Developer']
 tags : ['AI','Agents']
 metadata: { capability: 'Storage Solution', integrationType: 'Semantic Search', scope: 'Multi-Service Deployments' }
 
+## RDE_UsageGuide_Install
+command : npm install @reinvention/perAgent
+
+## RDE_UsageGuide_QuickStart
+import { FPP } from '@reinvention/package';
+
+const app = new FPP({
+  config: './config.json',
+  environment: 'production'
+});
+
+await app.initialize();
+app.start();
+
+## RDE_Asset_MetaData
+version: 3.12
+creator: Core Team
+owner: rajesh kannan
+
+
+
