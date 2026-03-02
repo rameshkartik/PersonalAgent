@@ -246,13 +246,13 @@ creator: Core Team
 owner: rajesh kannan
 
 ## RDE_Details_Tech_Spec
-Language : Python 3.9+2
-Framework : FastAPI / Django2
-Dependencies : pandas, asyncio, pydanti2c
+Language : Python 3.9+
+Framework : FastAPI / Django
+Dependencies : pandas, asyncio, pydantic
 License : MIT
 
 ## RDE_Details_Overview
-As Personal Agent is an AI-powered software assistant designed to act on behalf of an individual to automate tasks, retrieve information, make decisions, 
+A Personal Agent is an AI-powered software assistant designed to act on behalf of an individual to automate tasks, retrieve information, make decisions, 
 and interact with digital systems.
 It goes beyond a simple chatbot — it can remember preferences, take actions, and operate across tools.
 
