@@ -220,7 +220,7 @@ MIT
 ## RDEData
 title : PersonalAgent
 description : A Personal Agent to take care of personal day to day work
-category : Whitepapers
+category : code
 sdlcStage : plan
 personas : ['CTO','Enterprise Architect','AI Developer']
 tags : ['AI','Agents']
