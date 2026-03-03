@@ -225,6 +225,7 @@ sdlcStage : plan
 personas : ['CTO','Enterprise Architect','AI Developer']
 tags : ['AI','Agents']
 metadata: { capability: 'Storage Solution', integrationType: 'Semantic Search', scope: 'Multi-Service Deployments' }
+previewCodeFileName : agent.py
 
 ## RDE_UsageGuide_Install
 command : npm install @reinvention/perAgent
